@@ -1,12 +1,10 @@
 let db;
 
-// Incrementamos la versión de la base de datos a 2 para activar onupgradeneeded
 const request = indexedDB.open('usuariosDB', 2);
 
 request.onupgradeneeded = function(event) {
     db = event.target.result;
     
-    // Crear el almacén de objetos y el índice 'estado' si no existen
     if (!db.objectStoreNames.contains('usuarios')) {
         const objectStore = db.createObjectStore('usuarios', { keyPath: 'documento' });
         objectStore.createIndex('estado', 'estado', { unique: false });
@@ -21,18 +19,17 @@ request.onupgradeneeded = function(event) {
 request.onsuccess = function(event) {
     db = event.target.result;
     loadUsers();
-    setInterval(scanAndInsert, 5000); // Escanear cada 5 segundos
+    setInterval(scanAndInsert, 5000);
 };
 
 request.onerror = function(event) {
     console.error('Error al abrir la base de datos', event);
 };
 
-// Función para escanear y sincronizar usuarios con estado 'local' a la base de datos
 function scanAndInsert() {
     const transaction = db.transaction('usuarios', 'readonly');
     const objectStore = transaction.objectStore('usuarios');
-    const index = objectStore.index('estado'); // Acceso al índice 'estado'
+    const index = objectStore.index('estado');
     
     const request = index.getAll('local');
 
@@ -44,7 +41,6 @@ function scanAndInsert() {
     };
 }
 
-// Cargar usuarios en la tabla del frontend
 function loadUsers() {
     const transaction = db.transaction('usuarios', 'readonly');
     const objectStore = transaction.objectStore('usuarios');
@@ -66,7 +62,6 @@ function loadUsers() {
     };
 }
 
-// Agregar usuario desde el formulario
 document.getElementById('userForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const nombre = document.getElementById('nombre').value;
@@ -83,7 +78,6 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
     this.reset();
 });
 
-// Insertar usuario en la base de datos MySQL usando PHP
 function insertUserToDB(user) {
     fetch('http://localhost/sincronizacion-por-desconexion/insert_user.php', {
         method: 'POST',
@@ -96,7 +90,7 @@ function insertUserToDB(user) {
         if (data.success) {
             const transaction = db.transaction('usuarios', 'readwrite');
             const objectStore = transaction.objectStore('usuarios');
-            user.estado = 'en db'; // Cambiar el estado a 'en db' después de insertar
+            user.estado = 'en db';
             objectStore.put(user);
             loadUsers();
         } else {
