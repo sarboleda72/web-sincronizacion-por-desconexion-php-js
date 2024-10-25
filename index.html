@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Gestión de Usuarios</title>
+    <script src="indexeddb.js" defer></script>
+</head>
+<body class="bg-gray-100 p-5">
+    <div class="max-w-md mx-auto bg-white p-5 rounded shadow">
+        <h1 class="text-xl font-bold mb-4">Insertar Usuario</h1>
+        <form id="userForm">
+            <input type="text" id="nombre" placeholder="Nombre" class="border p-2 mb-2 w-full" required>
+            <input type="text" id="documento" placeholder="Documento" class="border p-2 mb-2 w-full" required>
+            <input type="text" id="direccion" placeholder="Dirección" class="border p-2 mb-2 w-full" required>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Agregar Usuario</button>
+        </form>
+    </div>
+
+    <div class="max-w-4xl mx-auto mt-5">
+        <h2 class="text-xl font-bold mb-4">Lista de Usuarios</h2>
+        <table class="min-w-full bg-white border">
+            <thead>
+                <tr>
+                    <th class="border p-2">Nombre</th>
+                    <th class="border p-2">Documento</th>
+                    <th class="border p-2">Dirección</th>
+                    <th class="border p-2">Estado</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Usuarios serán insertados aquí -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
