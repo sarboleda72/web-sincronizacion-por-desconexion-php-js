@@ -48,16 +48,18 @@ function loadUsers() {
 
     request.onsuccess = function(event) {
         const users = event.target.result;
-        const userTableBody = document.getElementById('userTableBody');
-        userTableBody.innerHTML = '';
+        const userCardContainer = document.getElementById('userCardContainer');
+        userCardContainer.innerHTML = '';
         users.forEach(user => {
-            const row = `<tr>
-                            <td class="border p-2">${user.nombre}</td>
-                            <td class="border p-2">${user.documento}</td>
-                            <td class="border p-2">${user.direccion}</td>
-                            <td class="border p-2">${user.estado}</td>
-                         </tr>`;
-            userTableBody.innerHTML += row;
+            const card = `
+                <div class="bg-white p-4 rounded shadow-md">
+                    <h2 class="text-lg font-bold">${user.nombre}</h3>
+                    <p class="text-lg text-gray-700"><strong>Documento:</strong> ${user.documento}</p>
+                    <p class="text-lg text-gray-700"><strong>Dirección:</strong> ${user.direccion}</p>
+                    <p class="text-lg text-gray-700"><strong>Estado:</strong> ${user.estado}</p>
+                </div>
+            `;
+            userCardContainer.innerHTML += card;
         });
     };
 }
@@ -79,7 +81,7 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
 });
 
 function insertUserToDB(user) {
-    fetch('http://localhost/sincronizacion-por-desconexion/insert_user.php', {
+    fetch('http://192.168.137.1:80/desconexion/insert_user.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
